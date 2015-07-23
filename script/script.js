@@ -2,7 +2,7 @@ window.onload = function() {
     'use strict';
 
     var $document = document;
-    $document.title = '<TITLE>';
+    $document.title = 'calcy';
 
     var $body = $document.body;
 
@@ -223,7 +223,7 @@ window.onload = function() {
         function on_change_view() {
             var select = this;
             var view = select.options[select.selectedIndex];
-            
+
             if (view !== 'autopilot') {
                 autopilot.stop();
 
@@ -253,7 +253,7 @@ window.onload = function() {
                 set_autopilot_view();
                 autopilot.start();
                 break;
-            }            
+            }
             default:{
                 throw 'unknown view';
             }
@@ -434,7 +434,7 @@ window.onload = function() {
         '1': true, '3': true, '5': true, '7': true, '9': true,
         '2': true, '4': true, '6': true, '8': true, '0': true,
         '=': true, '.': true,
-        '+': true, '-': true, '*': true, '/': true, 
+        '+': true, '-': true, '*': true, '/': true,
         '(': true, ')': true,
         'undo': true, '^l': true,
     };
@@ -454,7 +454,7 @@ window.onload = function() {
 
         // '/' -> quick find in firefox
         // we remap it to '/' (of course =))
-        if (key_code === 191) { event.preventDefault(); } 
+        if (key_code === 191) { event.preventDefault(); }
 
         if (key_code === 16 || key_code === 17) { return ''; } // shift and ctrl keys
 
@@ -475,7 +475,7 @@ window.onload = function() {
             pressed_key.push(key);
         }
         is_key_up[key] = false;
-        
+
         var btn = buttons_info[$btn.$action_id];
         if (btn.visible) {
             $btn.dispatchEvent(new Event('click'));
@@ -495,7 +495,7 @@ window.onload = function() {
             is_key_up['undo'] = true;
             return;
         }
-       
+
         if (key_code === 16 || key_code === 17) { return; } // shift and ctrl keys
 
         var key = pressed_key.shift();
@@ -526,7 +526,7 @@ window.onload = function() {
         else if (key_code ===  57 && !shift_key && !ctrl_key) { return '9';    }
         else if (key_code ===  48 && !shift_key && !ctrl_key) { return '0';    }
         else if (key_code === 187 && !shift_key && !ctrl_key) { return '=';    }
-        else if (key_code ===  13 && !shift_key && !ctrl_key) { return '=';    } // return 
+        else if (key_code ===  13 && !shift_key && !ctrl_key) { return '=';    } // return
         else if (key_code === 187 &&  shift_key && !ctrl_key) { return '+';    }
         else if (key_code === 189 && !shift_key && !ctrl_key) { return '-';    }
         else if (key_code ===  56 &&  shift_key && !ctrl_key) { return '*';    }
@@ -545,9 +545,9 @@ window.onload = function() {
     var autopilot = (function() {
         var exec_actions_delay = [500];
 
-        var action_id_for = { 
+        var action_id_for = {
             '(': 12, ')': 13,
-            '+': 14, '-': 15, '*': 16, '/': 17, 
+            '+': 14, '-': 15, '*': 16, '/': 17,
             '^l': 18, '=': 19
         };
 
@@ -564,7 +564,7 @@ window.onload = function() {
 //         var ast = random_ast(4);
 //         console.log(ast);
 
-// //         var actions = [1, 14, 2, 19]; // 1 + 2 =     
+// //         var actions = [1, 14, 2, 19]; // 1 + 2 =
 //         var actions = ast_to_actions(ast);
 //         actions.push(action_id_for['=']);
 //         console.log(actions);
@@ -606,7 +606,7 @@ window.onload = function() {
                 return ['number', random_number(rand(1, 4)) ];
             }
 
-            ast[0] = 'op';                
+            ast[0] = 'op';
             var ops = ['+', '-', '*', '/'];
             var random_op = ops[rand(0, 3)];
             ast[1] = random_op;
@@ -616,7 +616,7 @@ window.onload = function() {
 
             return ast;
         }
-    
+
         function random_number(length) {
             var random_number = ''+(rand(1, 9));
             length -= 1;
@@ -641,7 +641,7 @@ window.onload = function() {
                 if (!action_id_for[op]) {
                     throw 'unknown op: ' + "'" + op + "'";
                 }
-                
+
                 var op_precedence = precedence_of[op];
 
                 if (parent_op_precedence > op_precedence) {
@@ -663,18 +663,18 @@ window.onload = function() {
 
             case 'number': {
                 var number = ast[1];
-                var digits 
+                var digits
                   = (''+number)
                     .split('')
                     .map(function(digit) {
                         var action_id = parseInt(digit, 10);
                         // the action_id of '0' is 10, because action_id 0
                         // is for 'undo'
-                        return action_id === 0 ? 10 : action_id 
+                        return action_id === 0 ? 10 : action_id
                     })
                     ;
                 actions.push.apply(actions, digits);
-                
+
                 break;
             }
 
@@ -689,7 +689,7 @@ window.onload = function() {
 
         function exec_actions(actions, callback_on_finish) {
             var actions_count = actions.length;
-            
+
             var $prev_btn;
             timer[0] = setTimeout(loop, exec_actions_delay[0]);
 
@@ -705,7 +705,7 @@ window.onload = function() {
                     }
                     return;
                 }
-                
+
                 var action_id = actions[actions.length - actions_count - 1];
                 var $btn = $buttons[action_id];
                 actions_table[action_id].$do();
@@ -737,5 +737,5 @@ window.onload = function() {
         var t = Math.random();
         var result = a +  t * (b - a + 1);
         return Math.floor(result);
-    }    
+    }
 };
